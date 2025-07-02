@@ -18,7 +18,7 @@ scope = [
     'https://www.googleapis.com/auth/drive'
 ]
 
-# ✅ Читаем GOOGLE_CREDS_JSON из переменных окружения
+# ✅ Читаем GOOGLE_CREDS_JSON как словарь
 creds_json = os.environ['GOOGLE_CREDS_JSON']
 creds_dict = json.loads(creds_json)
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
@@ -66,3 +66,4 @@ def handle_photo(message):
     bot.reply_to(message, "✅ Отчёт принят!")
 
 bot.polling()
+
