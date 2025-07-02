@@ -3,7 +3,6 @@ from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
-import json
 
 # === Токен Telegram-бота ===
 BOT_TOKEN = os.environ['BOT_TOKEN']
@@ -18,10 +17,8 @@ scope = [
     'https://www.googleapis.com/auth/drive'
 ]
 
-# ✅ Читаем GOOGLE_CREDS_JSON как словарь
-creds_json = os.environ['GOOGLE_CREDS_JSON']
-creds_dict = json.loads(creds_json)
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+# ✅ Читаем credentials из Secret File
+creds = ServiceAccountCredentials.from_json_keyfile_name('/etc/secrets/credentials.json', scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
