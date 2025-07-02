@@ -1,13 +1,9 @@
 import telebot
 from datetime import datetime
 import gspread
-import os
-import json
-from dotenv import load_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
 
-# === Загрузка переменных окружения из Secret File (.env) ===
-load_dotenv("/etc/secrets/.env")
+import os
 
 # === Токен Telegram-бота ===
 BOT_TOKEN = os.environ['BOT_TOKEN']
@@ -22,9 +18,8 @@ scope = [
     'https://www.googleapis.com/auth/drive'
 ]
 
-# ✅ Используем GOOGLE_CREDS_JSON из переменной окружения
-creds_dict = json.loads(os.environ['GOOGLE_CREDS_JSON'])
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+# ✅ Читаем credentials.json из Secret Files
+creds = ServiceAccountCredentials.from_json_keyfile_name('/etc/secrets/credentials.json', scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
@@ -56,7 +51,6 @@ def handle_photo(message):
     user = message.from_user.username or message.from_user.first_name
     stitches_total = int(qty) * int(stitches) if qty != "❌" and stitches != "❌" else "❌"
 
-    # === Добавление строки в Google Таблицу по ячейкам (без апострофа) ===
     row_data = [timestamp, user, image_formula, machine, qty, stitches, stitches_total]
     row_index = len(sheet.get_all_values()) + 1
 
