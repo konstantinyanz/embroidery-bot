@@ -60,7 +60,7 @@ def handle_photo(message):
     except Exception as e:
         print("❌ Ошибка при добавлении строки в таблицу:", e)
 
-    bot.reply_to(message, "✅ Отчёт принят!")
+    bot.send_message(message.chat.id, ...)
 
 bot.polling()
 
